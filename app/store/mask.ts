@@ -17,6 +17,7 @@ export type Mask = {
   modelConfig: ModelConfig;
   lang: Lang;
   builtin: boolean;
+  usePlugins?: boolean;
 };
 
 export const DEFAULT_MASK_STATE = {
@@ -37,7 +38,10 @@ export const createEmptyMask = () =>
     lang: getLang(),
     builtin: false,
     createdAt: Date.now(),
-  }) as Mask;
+    usePlugins: /^gpt(?!.*03\d{2}$).*$/.test(
+      useAppConfig.getState().modelConfig.model,
+    ),
+  } as Mask);
 
 export const useMaskStore = createPersistStore(
   { ...DEFAULT_MASK_STATE },
@@ -92,7 +96,7 @@ export const useMaskStore = createPersistStore(
               ...config.modelConfig,
               ...m.modelConfig,
             },
-          }) as Mask,
+          } as Mask),
       );
       return userMasks.concat(buildinMasks);
     },

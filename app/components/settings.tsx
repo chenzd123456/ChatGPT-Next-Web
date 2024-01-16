@@ -52,6 +52,7 @@ import { copyToClipboard } from "../utils";
 import Link from "next/link";
 import {
   Azure,
+  Google,
   OPENAI_BASE_URL,
   Path,
   RELEASE_URL,
@@ -68,6 +69,7 @@ import { Avatar, AvatarPicker } from "./emoji";
 import { getClientConfig } from "../config/client";
 import { useSyncStore } from "../store/sync";
 import { nanoid } from "nanoid";
+import { PluginConfigList } from "./plugin-config";
 import { useMaskStore } from "../store/mask";
 import { ProviderType } from "../utils/cloud";
 
@@ -583,6 +585,7 @@ export function Settings() {
   const accessStore = useAccessStore();
   const shouldHideBalanceQuery = useMemo(() => {
     const isOpenAiUrl = accessStore.openaiUrl.includes(OPENAI_BASE_URL);
+
     return (
       accessStore.hideBalanceQuery ||
       isOpenAiUrl ||
@@ -635,6 +638,12 @@ export function Settings() {
         navigate(Path.Home);
       }
     };
+    if (clientConfig?.isApp) {
+      // Force to set custom endpoint to true if it's app
+      accessStore.update((state) => {
+        state.useCustomConfig = true;
+      });
+    }
     document.addEventListener("keydown", keydownEvent);
     return () => {
       document.removeEventListener("keydown", keydownEvent);
@@ -909,21 +918,26 @@ export function Settings() {
 
           {!accessStore.hideUserApiKey && (
             <>
-              <ListItem
-                title={Locale.Settings.Access.CustomEndpoint.Title}
-                subTitle={Locale.Settings.Access.CustomEndpoint.SubTitle}
-              >
-                <input
-                  type="checkbox"
-                  checked={accessStore.useCustomConfig}
-                  onChange={(e) =>
-                    accessStore.update(
-                      (access) =>
-                        (access.useCustomConfig = e.currentTarget.checked),
-                    )
-                  }
-                ></input>
-              </ListItem>
+              {
+                // Conditionally render the following ListItem based on clientConfig.isApp
+                !clientConfig?.isApp && ( // only show if isApp is false
+                  <ListItem
+                    title={Locale.Settings.Access.CustomEndpoint.Title}
+                    subTitle={Locale.Settings.Access.CustomEndpoint.SubTitle}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={accessStore.useCustomConfig}
+                      onChange={(e) =>
+                        accessStore.update(
+                          (access) =>
+                            (access.useCustomConfig = e.currentTarget.checked),
+                        )
+                      }
+                    ></input>
+                  </ListItem>
+                )
+              }
               {accessStore.useCustomConfig && (
                 <>
                   <ListItem
@@ -987,7 +1001,7 @@ export function Settings() {
                         />
                       </ListItem>
                     </>
-                  ) : (
+                  ) : accessStore.provider === "Azure" ? (
                     <>
                       <ListItem
                         title={Locale.Settings.Access.Azure.Endpoint.Title}
@@ -1046,13 +1060,72 @@ export function Settings() {
                         ></input>
                       </ListItem>
                     </>
-                  )}
+                  ) : accessStore.provider === "Google" ? (
+                    <>
+                      <ListItem
+                        title={Locale.Settings.Access.Google.Endpoint.Title}
+                        subTitle={
+                          Locale.Settings.Access.Google.Endpoint.SubTitle +
+                          Google.ExampleEndpoint
+                        }
+                      >
+                        <input
+                          type="text"
+                          value={accessStore.googleBaseUrl}
+                          placeholder={Google.ExampleEndpoint}
+                          onChange={(e) =>
+                            accessStore.update(
+                              (access) =>
+                                (access.googleBaseUrl = e.currentTarget.value),
+                            )
+                          }
+                        ></input>
+                      </ListItem>
+                      <ListItem
+                        title={Locale.Settings.Access.Azure.ApiKey.Title}
+                        subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
+                      >
+                        <PasswordInput
+                          value={accessStore.googleApiKey}
+                          type="text"
+                          placeholder={
+                            Locale.Settings.Access.Google.ApiKey.Placeholder
+                          }
+                          onChange={(e) => {
+                            accessStore.update(
+                              (access) =>
+                                (access.googleApiKey = e.currentTarget.value),
+                            );
+                          }}
+                        />
+                      </ListItem>
+                      <ListItem
+                        title={Locale.Settings.Access.Google.ApiVerion.Title}
+                        subTitle={
+                          Locale.Settings.Access.Google.ApiVerion.SubTitle
+                        }
+                      >
+                        <input
+                          type="text"
+                          value={accessStore.googleApiVersion}
+                          placeholder="2023-08-01-preview"
+                          onChange={(e) =>
+                            accessStore.update(
+                              (access) =>
+                                (access.googleApiVersion =
+                                  e.currentTarget.value),
+                            )
+                          }
+                        ></input>
+                      </ListItem>
+                    </>
+                  ) : null}
                 </>
               )}
             </>
           )}
 
-          {!shouldHideBalanceQuery ? (
+          {!shouldHideBalanceQuery && !clientConfig?.isApp ? (
             <ListItem
               title={Locale.Settings.Usage.Title}
               subTitle={
@@ -1109,6 +1182,17 @@ export function Settings() {
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
         )}
+
+        <List>
+          <PluginConfigList
+            pluginConfig={config.pluginConfig}
+            updateConfig={(updater) => {
+              const pluginConfig = { ...config.pluginConfig };
+              updater(pluginConfig);
+              config.update((config) => (config.pluginConfig = pluginConfig));
+            }}
+          />
+        </List>
 
         <DangerItems />
       </div>
