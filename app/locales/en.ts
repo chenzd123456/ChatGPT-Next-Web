@@ -15,7 +15,7 @@ const en: LocaleType = {
   Auth: {
     Title: "Need Access Code",
     Tips: "Please enter access code below",
-    SubTips: "Or enter your OpenAI API Key",
+    SubTips: "Or enter your OpenAI or Google API Key",
     Input: "access code",
     Confirm: "Confirm",
     Later: "Later",
@@ -65,8 +65,8 @@ const en: LocaleType = {
       Masks: "Masks",
       Clear: "Clear Context",
       Settings: "Settings",
-      OpenWebSearch: "Enable Web Search",
-      CloseWebSearch: "Disable Web Search",
+      EnablePlugins: "Enable Plugins",
+      DisablePlugins: "Disable Plugins",
     },
     Rename: "Rename Chat",
     Typing: "Typing…",
@@ -321,6 +321,24 @@ const en: LocaleType = {
         Title: "Custom Models",
         SubTitle: "Custom model options, seperated by comma",
       },
+      Google: {
+        ApiKey: {
+          Title: "API Key",
+          SubTitle:
+            "Bypass password access restrictions using a custom Google AI Studio API Key",
+          Placeholder: "Google AI Studio API Key",
+        },
+
+        Endpoint: {
+          Title: "Endpoint Address",
+          SubTitle: "Example:",
+        },
+
+        ApiVerion: {
+          Title: "API Version (gemini-pro api version)",
+          SubTitle: "Select a specific part version",
+        },
+      },
     },
 
     Model: "Model",
@@ -346,6 +364,20 @@ const en: LocaleType = {
       SubTitle:
         "A larger value decreasing the likelihood to repeat the same line",
     },
+    Plugin: {
+      Enable: {
+        Title: "Enable Plugin",
+        SubTitle: "Enable plugin invocation",
+      },
+      MaxIteration: {
+        Title: "Max Iterations",
+        SubTitle: "Max of plugin iterations",
+      },
+      ReturnIntermediateStep: {
+        Title: "Return Intermediate Steps",
+        SubTitle: "Return Intermediate Steps",
+      },
+    },
   },
   Store: {
     DefaultTopic: "New Conversation",
@@ -355,7 +387,7 @@ const en: LocaleType = {
       History: (content: string) =>
         "This is a summary of the chat history as a recap: " + content,
       Topic:
-        "Please generate a four to five word title summarizing our conversation without any lead-in, punctuation, quotation marks, periods, symbols, or additional text. Remove enclosing quotation marks.",
+        "Please generate a four to five word title summarizing our conversation without any lead-in, punctuation, quotation marks, periods, symbols, bold text, or additional text. Remove enclosing quotation marks.",
       Summarize:
         "Summarize the discussion briefly in 200 words or less to use as a prompt for future context.",
     },
@@ -377,6 +409,25 @@ const en: LocaleType = {
   },
   Plugin: {
     Name: "Plugin",
+    Page: {
+      Title: "Plugin Template",
+      SubTitle: (count: number) => `${count} plugin templates`,
+      Search: "Search Templates",
+      Create: "Create",
+    },
+    Item: {
+      View: "View",
+      Edit: "Edit",
+      Delete: "Delete",
+      DeleteConfirm: "Confirm to delete?",
+    },
+    EditModal: {
+      Title: (readonly: boolean) =>
+        `Edit Plugin Template ${readonly ? "(readonly)" : ""}`,
+      Download: "Download",
+      Clone: "Clone",
+    },
+    RuntimeWarning: "Only available when deployed in a non-Vercel environment.",
   },
   FineTuned: {
     Sysmessage: "You are an assistant that",
@@ -429,7 +480,7 @@ const en: LocaleType = {
     SubTitle: "Chat with the Soul behind the Mask",
     More: "Find More",
     NotShow: "Never Show Again",
-    ConfirmNoShow: "Confirm to disable？You can enable it in settings later.",
+    ConfirmNoShow: "Confirm to disable? You can enable it in settings later.",
   },
 
   UI: {
@@ -444,6 +495,9 @@ const en: LocaleType = {
     Config: "Config",
   },
   Exporter: {
+    Description: {
+      Title: "Only messages after clearing the context will be displayed",
+    },
     Model: "Model",
     Messages: "Messages",
     Topic: "Topic",
@@ -451,7 +505,7 @@ const en: LocaleType = {
   },
 
   URLCommand: {
-    Code: "Detected access code from url, confirm to apply? ",
+    Code: "Detected access code from url, confirm to apply?",
     Settings: "Detected settings from url, confirm to apply?",
   },
 };
