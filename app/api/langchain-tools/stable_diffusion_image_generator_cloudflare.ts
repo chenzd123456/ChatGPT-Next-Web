@@ -10,6 +10,11 @@ export class StableDiffusionCloudflareWrapper extends Tool {
   /** @ignore */
   async _call(prompt: string) {
     let url = process.env.STABLE_DIFFUSION_CLOUDFLARE_API_URL;
+
+    if (!url) {
+      return "`STABLE_DIFFUSION_CLOUDFLARE_API_URL` Not configured";
+    }
+
     const filePath = `${url}/${prompt}`;
     return filePath;
   }
