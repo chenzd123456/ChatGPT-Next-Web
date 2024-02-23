@@ -49,7 +49,7 @@ export class EdgeTool {
     let tools = [
       calculatorTool,
       webBrowserTool,
-      dallEAPITool,
+      // dallEAPITool,
       stableDiffusionTool,
       arxivAPITool,
       wolframAlphaTool,

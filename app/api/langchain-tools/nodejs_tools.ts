@@ -51,7 +51,7 @@ export class NodeJSTool {
     let tools = [
       calculatorTool,
       webBrowserTool,
-      dallEAPITool,
+      // dallEAPITool,
       stableDiffusionTool,
       arxivAPITool,
       wolframAlphaTool,
