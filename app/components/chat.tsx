@@ -521,16 +521,24 @@ export function ChatActions(props: {
         if (items[i].type.indexOf("image") === -1) continue;
         const file = items[i].getAsFile();
         if (file !== null) {
-          api.file.upload(file).then((fileName) => {
-            props.imageSelected({
-              fileName,
-              fileUrl: `/api/file/${fileName}`,
-            });
-          });
+          setUploadLoading(true);
+          api.file
+            .upload(file)
+            .then((uploadFile) => {
+              props.imageSelected({
+                fileName: uploadFile.fileName,
+                fileUrl: uploadFile.filePath,
+              });
+            })
+            .catch((e) => {
+              console.error("[Upload]", e);
+              showToast(prettyObject(e));
+            })
+            .finally(() => setUploadLoading(false));
         }
       }
     };
-    if (currentModel === "gpt-4-vision-preview") {
+    if (currentModel.includes("vision")) {
       window.addEventListener("paste", onPaste);
       return () => {
         window.removeEventListener("paste", onPaste);
@@ -612,7 +620,7 @@ export function ChatActions(props: {
               icon={usePlugins ? <EnablePluginIcon /> : <DisablePluginIcon />}
             />
           )}
-        {currentModel == "gpt-4-vision-preview" && (
+        {currentModel.includes("vision") && (
           <ChatAction
             onClick={selectImage}
             text="选择图片"
@@ -1404,7 +1412,7 @@ function _Chat() {
                       defaultShow={i >= messages.length - 6}
                     />
                   </div>
-                  {!isUser && message.model == "gpt-4-vision-preview" && (
+                  {!isUser && message.model?.includes("vision") && (
                     <div
                       className={[
                         styles["chat-message-actions"],
