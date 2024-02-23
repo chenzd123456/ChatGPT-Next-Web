@@ -3,7 +3,7 @@ import { PDFBrowser } from "@/app/api/langchain-tools/pdf_browser";
 import { Embeddings } from "langchain/dist/embeddings/base.js";
 import { ArxivAPIWrapper } from "@/app/api/langchain-tools/arxiv";
 import { DallEAPINodeWrapper } from "@/app/api/langchain-tools/dalle_image_generator_node";
-import { StableDiffusionNodeWrapper } from "@/app/api/langchain-tools/stable_diffusion_image_generator_node";
+import { StableDiffusionCloudflareWrapper } from "@/app/api/langchain-tools/stable_diffusion_image_generator_cloudflare";
 import { Calculator } from "langchain/tools/calculator";
 import { WebBrowser } from "langchain/tools/webbrowser";
 import { WolframAlphaTool } from "@/app/api/langchain-tools/wolframalpha";
@@ -44,7 +44,7 @@ export class NodeJSTool {
       this.baseUrl,
       this.callback,
     );
-    const stableDiffusionTool = new StableDiffusionNodeWrapper();
+    const stableDiffusionTool = new StableDiffusionCloudflareWrapper();
     const arxivAPITool = new ArxivAPIWrapper();
     const wolframAlphaTool = new WolframAlphaTool();
     const pdfBrowserTool = new PDFBrowser(this.model, this.embeddings);

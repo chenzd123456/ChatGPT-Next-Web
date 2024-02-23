@@ -1,6 +1,6 @@
 import { ArxivAPIWrapper } from "@/app/api/langchain-tools/arxiv";
 import { DallEAPIWrapper } from "@/app/api/langchain-tools/dalle_image_generator";
-import { StableDiffusionWrapper } from "@/app/api/langchain-tools/stable_diffusion_image_generator";
+import { StableDiffusionCloudflareWrapper } from "@/app/api/langchain-tools/stable_diffusion_image_generator_cloudflare";
 import { BaseLanguageModel } from "langchain/dist/base_language";
 import { Calculator } from "langchain/tools/calculator";
 import { WebBrowser } from "langchain/tools/webbrowser";
@@ -43,7 +43,7 @@ export class EdgeTool {
       this.baseUrl,
       this.callback,
     );
-    const stableDiffusionTool = new StableDiffusionWrapper();
+    const stableDiffusionTool = new StableDiffusionCloudflareWrapper();
     const arxivAPITool = new ArxivAPIWrapper();
     const wolframAlphaTool = new WolframAlphaTool();
     let tools = [
