@@ -7,9 +7,9 @@
 
 [![Web][Web-image]][web-url]
 
-[网页版](https://chat-gpt-next-web-gosuto.vercel.app/) / [反馈](https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues)
+[网页版](https://n3xt.chat) / [反馈](https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues) / [Discord](https://discord.gg/zTwDFtSC)
 
-[web-url]: https://chat-gpt-next-web-gosuto.vercel.app/
+[web-url]: https://n3xt.chat/
 [download-url]: https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/releases
 [Web-image]: https://img.shields.io/badge/Web-PWA-orange?logo=microsoftedge
 [Windows-image]: https://img.shields.io/badge/-Windows-blue?logo=windows
@@ -20,7 +20,12 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain)
 
-![cover](./docs/images/gpt-vision-example.jpg)
+</div>
+
+> [!WARNING]
+> 本项目插件功能基于 [OpenAI API 函数调用](https://platform.openai.com/docs/guides/function-calling) 功能实现，转发 GitHub Copilot 接口或类似实现的模拟接口并不能正常调用插件功能！
+
+![cover](./docs/images/rag-example.jpg)
 
 ![plugin-example](./docs/images/plugin-example.png)
 
@@ -28,14 +33,20 @@
 
 ![dall-e-plugin](./docs/images/dalle-plugin-example.png)
 
-</div>
-
 ## 主要功能
+
+- RAG 功能 （预览）
+  - 配置请参考文档[RAG 功能配置说明](./docs/rag-cn.md)
 
 - 除插件工具外，与原项目保持一致 [ChatGPT-Next-Web 主要功能](https://github.com/Yidadaa/ChatGPT-Next-Web#主要功能)
 
+- 支持 OpenAI TTS（文本转语音）https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/208
+
+- 支持语音输入，需要使用 HTTPS 访问 https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/208
+
 - 支持 GPT-4V(视觉) 模型
-  - 需要配置对象存储服务，请参考 [对象存储服务配置指南](./docs/s3-oss.md) 配置
+  - ~~需要配置对象存储服务，请参考 [对象存储服务配置指南](./docs/s3-oss.md) 配置~~
+  - 已同步上游仓库视觉模型调用方式（压缩图片），这里还是会有撑爆 LocalStorage 的风险 https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/77#issuecomment-1846410078 ，后面如果出现类似问题会再适配对象存储来存储图像。
   
 - 基于 [LangChain](https://github.com/hwchase17/langchainjs) 实现的插件功能，目前支持以下插件，未来会添加更多
   - 搜索（优先级：`GoogleCustomSearch > SerpAPI > BingSerpAPI > ChooseSearchEngine > DuckDuckGo`）
@@ -57,7 +68,7 @@
       - 环境变量：`BING_SEARCH_API_KEY`
       - 申请地址：[Web Search API | Microsoft Bing](https://www.microsoft.com/en-us/bing/apis/bing-web-search-api)
   
-    - ChooseSearchEngine
+    - ChooseSearchEngine（作者：[hang666](https://github.com/hang666)）
   
       - 环境变量：`CHOOSE_SEARCH_ENGINE`
   
@@ -96,15 +107,23 @@
       - 使用本插件需要一定的专业知识，Stable Diffusion 本身的相关问题不在本项目的解答范围内，如果您确定要使用本插件请参考 [Stable Diffusion 插件配置指南](./docs/stable-diffusion-plugin-cn.md) 文档进行配置
       - StableDiffusion 插件需要配置对象存储服务，请参考 [对象存储服务配置指南](./docs/s3-oss.md) 配置
     - Arxiv
+    - B站相关插件（作者：[fred913](https://github.com/fred913)）
+      - bilibili 视频信息获取（建议使用以下插件时同时启用本插件）
+      - bilibili 视频搜索
+        - 需配置环境变量 `BILIBILI_COOKIES`
+      - bilibili 听歌识曲
+        - 需提前部署 [bilivid-metaprocess-server](https://github.com/fred913/bilivid-metaprocess-server) 并配置环境变量 `BILIVID_METAPROCESS_SERVER_ADDRESS`
+      - bilibili视频总结
+        - 需配置环境变量 `BILIBILI_COOKIES`
   
 - 支持 gemini-pro, gemini-pro-vision 模型
   - 以下功能目前还不支持
     - **插件功能**
   - 如何启用
     - 配置密钥 `GOOGLE_API_KEY` ，key 可以在这里获取：https://ai.google.dev/tutorials/setup
-    - 配置自定义接口地址（可选） `GOOGLE_BASE_URL`，可以使用我的这个项目搭建一个基于 vercel 的代理服务：[google-gemini-vercel-proxy](https://github.com/Hk-Gosuto/google-gemini-vercel-proxy)
+    - 配置自定义接口地址（可选） `GEMINI_BASE_URL`，可以使用我的这个项目搭建一个基于 vercel 的代理服务：[vercel-ai-proxy](https://github.com/Hk-Gosuto/vercel-ai-proxy)
   - 常见问题参考：[Gemini Prompting FAQs](https://js.langchain.com/docs/integrations/chat/google_generativeai#gemini-prompting-faqs)
-  - gemini-pro-vision 模型需要配置对象存储服务，请参考 [对象存储服务配置指南](./docs/s3-oss.md) 配置
+  - ~~gemini-pro-vision 模型需要配置对象存储服务，请参考 [对象存储服务配置指南](./docs/s3-oss.md) 配置~~
   - ⚠ gemini-pro-vision 注意事项 https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/203 ：
     - 每次对话必须包含图像数据，不然会出现 `Add an image to use models/gemini-pro-vision, or switch your model to a text model.` 错误。
     - 只支持单轮对话，多轮对话会出现 `Multiturn chat is not enabled for models/gemini-pro-vision` 错误。
@@ -132,12 +151,15 @@
 
   最新版本中已经移除上面两个模型。
 
-- [ ] 支持添加自定义插件
+- [x] 支持语音输入 https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/208
 
-## 最新动态
+- [x] 支持其他类型文件上传 https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/77
 
-- 🚀 v2.9.5 正式版本发布
-- 🚀 v2.9.1-plugin-preview 预览版发布。
+- [ ] 支持 Azure Storage https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/217
+
+- [ ] 支持 Fooocus-API 插件 https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/58
+
+- [ ] 支持在 UI 配置插件需要的 Key https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/issues/70
 
 ## 开始使用
 
@@ -243,6 +265,32 @@ Azure Api 版本，你可以在这里找到：[Azure 文档](https://learn.micro
 
 如果你不想让用户使用历史摘要功能，将此环境变量设置为 1 即可。
 
+### `ANTHROPIC_API_KEY` (optional)
+
+anthropic claude Api Key.
+
+### `ANTHROPIC_API_VERSION` (optional)
+
+anthropic claude Api version.
+
+### `ANTHROPIC_URL` (optional)
+
+anthropic claude Api Url.
+
+### `DISABLE_FAST_LINK` （可选）
+
+如果你想禁用从链接解析预制设置，将此环境变量设置为 1 即可。
+
+### `WHITE_WEBDEV_ENDPOINTS` (optional)
+
+如果你想增加允许访问的webdav服务地址，可以使用该选项，格式要求：
+- 每一个地址必须是一个完整的 endpoint
+> `https://xxxx/xxx`
+- 多个地址以`,`相连
+
+### `DEFAULT_INPUT_TEMPLATE` （可选）
+自定义默认的 template，用于初始化『设置』中的『用户输入预处理』配置项
+
 ## 部署
 
 ### 容器部署 （推荐）
@@ -284,17 +332,9 @@ docker run -d -p 3000:3000 \
 | [简体中文](./docs/synchronise-chat-logs-cn.md) | [English](./docs/synchronise-chat-logs-en.md) | [Italiano](./docs/synchronise-chat-logs-es.md) | [日本語](./docs/synchronise-chat-logs-ja.md) | [한국어](./docs/synchronise-chat-logs-ko.md)
 
 
-## 贡献者
+## Star History
 
-<a href="https://github.com/Hk-Gosuto/ChatGPT-Next-Web-LangChain/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Hk-Gosuto/ChatGPT-Next-Web-LangChain" />
-</a>
-
-## 截图
-
-![Settings](./docs/images/settings.png)
-
-![More](./docs/images/more.png)
+[![Star History Chart](https://api.star-history.com/svg?repos=Hk-Gosuto/ChatGPT-Next-Web-LangChain&type=Date)](https://star-history.com/#Hk-Gosuto/ChatGPT-Next-Web-LangChain&Date)
 
 ## 捐赠
 
