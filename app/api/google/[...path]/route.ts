@@ -17,7 +17,7 @@ async function handle(
 
   const serverConfig = getServerSideConfig();
 
-  let baseUrl = serverConfig.googleBaseUrl || GOOGLE_BASE_URL;
+  let baseUrl = serverConfig.googleUrl || GOOGLE_BASE_URL;
 
   if (!baseUrl.startsWith("http")) {
     baseUrl = `https://${baseUrl}`;
@@ -32,9 +32,12 @@ async function handle(
   console.log("[Proxy] ", path);
   console.log("[Base Url]", baseUrl);
 
-  const timeoutId = setTimeout(() => {
-    controller.abort();
-  }, 10 * 60 * 1000);
+  const timeoutId = setTimeout(
+    () => {
+      controller.abort();
+    },
+    10 * 60 * 1000,
+  );
 
   const authResult = auth(req, ModelProvider.GeminiPro);
   if (authResult.error) {
